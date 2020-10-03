@@ -124,7 +124,7 @@ public class Car{
 }
 
 
-Class Tire{
+class Tire{
 
 }
 ```
