@@ -253,3 +253,123 @@ public class ClassName {
 <hr></br>
 
 ### 6. 필드(Field)
+
+**필드(Field)란, 객체의 고유 데이터, 객체가 가져야 할 부품, 객체의 현재 상태 데이터를 저장하는 곳.**
+
+```java
+public class Car {
+
+    // 고유 데이터 - 제조사, 모델명, 색깔, 최고 속도
+    String company;
+    String medoel;
+    String color;
+    int maxSpeed;
+
+    // 상태 데이터 - 현재 속도, 엔진 분당 회전 수
+    int speed;
+    int rpm;
+
+    // 부품 - 차체, 엔진, 타이어
+    Body body;
+    Engine engine;
+    Tire tire;
+}
+```
+
+#### 6.1 필드 선언
+
+**필드는 클래스 중괄호 { } 블록 어디서든 선언될 수 있지만, 생성자와 메소드 중괄호 블록 내부에서는 선언될 수 없다.** 생성자와 메소드 중괄호 블록 내부에 선언된 것은 모두 **_로컬 변수_** 가 되기 때문이다. 필드 선언은 변수의 선언 형태와 비슷하여 클래스 멤버 변수라고 부르기도 한다.
+
+> Type field [= initial value];
+
+타입은 필드에 저장할 데이터의 종류를 결정한다.</br>
+
+> 기본 타입(Primitive Type) : byte, short, char, int, long, float, double, boolean </br> 참조 타입(reference type) : Array, Class, Interface, String, ...
+
+```java
+//필드 선언 예시
+String company = "Hyundai";
+String model = "Grandeur";
+int maxSpeed = 300;
+int productionYear;
+int currentSpeed;
+boolean engineStart;
+```
+
+**초기값이 지정되지 않은 필드들은 객체 생성 시 자동으로 초기값으로 설정된다.**
+
+<hr>
+
+#### 6.2 필드 사용
+
+**필드를 사용한다는 것은 필드값을 읽고, 변경하는 작업을 말한다.** 클래스 내부의 생성자나 메소드에서 사용할 경우 단순히 필드 이름으로 읽고 변경하면 되지만, **클래스 외부에서 사용할 경우 우선적으로 클래스로부터 객체를 생성한 뒤 필드를 사용해야 한다.** 왜냐하면 **필드는 객체에 소속된 데이터**이므로 객체가 존재하지 않으면 필드 또한 존재할 수 없기 때문이다.
+
+```java
+public class Car {
+    // Field
+    int speed;
+
+    // Constructor
+    Car() {
+        speed = 0;       // speed 필드값 변경
+    }
+
+    // Method
+    void method(...) {
+        speed = 10;      // speed 필드값 변경
+    }
+}
+
+class Person {
+    void method() {
+        // Car 객체 생성
+        Car myCar = new Car();
+
+        // Field 사용
+        myCar.speed = 60;       // speed 필드값 변경
+    }
+}
+```
+
+Car 클래스의 speed 필드는 생성자와 메소드에서 변경 가능. 외부 Person 클래스에서 Car 클래스의 speed 필드값을 사용 시 Car 객체 우선 생성 필수.
+
+```java
+Car myCar = new Car();
+```
+
+myCar 변수가 Car 객체를 참조하게 되면 도트(.) 연산자를 사용해서 speed 필드에 접근할 수 있다. 도트(.) 연산자는 객체 접근 연산자로 객체가 가지고 있는 필드나 메소드를 사용하고자 할 때 사용된다.
+
+```java
+// Car 클래스의 필드 선언
+public class Car {
+    // 필드
+    String company = "Hyundai";
+    String model = "Grandeur";
+    String color = "Black";
+    int maxSpeed = 350;
+    int speed; // default = 0
+}
+```
+
+```java
+// 외부 클래스에서 Car 클래스 필드값 읽기와 변경
+public class CarExample {
+    public static void main(String[] args) {
+        // 객체 생성
+        Car myCar = new Car();
+
+        // 필드값 읽기
+        System.out.println("제조사: " + myCar.company);
+        System.out.println("모델명: " + myCar.model);
+        System.out.println("색깔: " + myCar.color);
+        System.out.println("최고속도: " + myCar.maxSpeed);
+        System.out.println("현재속도: " + myCar.speed);
+
+        // 필드값 변경
+        myCar.speed = 60;
+        System.out.println("수정된 속도: " + myCar.speed);
+    }
+}
+```
+
+<hr>
