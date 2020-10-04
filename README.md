@@ -373,3 +373,206 @@ public class CarExample {
 ```
 
 <hr>
+
+### 7. 생성자(Constructor)
+
+**생성자(Constructor)는 new 연산자와 같이 사용되어 클래스로부터 객체를 생성할 때 호출되어 객체의 초기화를 담당한다.** 객체 초기화란 필드를 초기화하거나, 메소드를 호출해서 객체를 사용할 준비를 하는 것을 말한다. 생성자를 실행시키지 않고는 클래스로부터 객체를 만들 수 없다. new 연산자에 의해 생성자가 성공적으로 실행되면 힙(heap) 영역에 객체가 생성되고 객체의 주소가 리턴된다. 리턴된 객체 주소는 클래스 타입 변수에 저장되어 객체에 접근할 때 이용된다.
+
+#### 7.1 기본 생성자
+
+모든 클래스는 하나 이상의 생성자가 반드시 존재한다. 클래스 내부에 생성자 선언을 생략했다면 컴파일러는 중괄호 { } 블록 내용이 비어있는 **기본 생성자(Default Constructor)** 를 바이트 코드에 자동 추가한다.
+
+> [public] class() { }
+
+**클래스가 public class로 선언되면 기본 생성자에서도 public이 붙지만, 클래스가 public 없이 class로만 선언되면 기본 생성자에도 public이 붙지 않는다.**
+그렇기 때문에 클래스에 생성자를 선언하지 않아도 다음과 같이 new 연산자 뒤에 기본 생성자를 호출해서 객체를 생성시킬 수 있다.
+
+```java
+Car myCar = new Car(); // Default Constructor
+```
+
+그러나 클래스에 명시적으로 선언한 생성자가 한 개라도 있으면, 컴파일러는 기본 생성자를 추가 하지 않는다.
+
+#### 7.2 생성자 선언
+
+```java
+// 생성자 블록
+className( 매개 변수 선언, ...) {
+    // 객체의 초기화 코드
+}
+```
+
+**생성자는 메소드와 비슷한 모양을 가지고 있으나, 리턴 타입이 없고 클래스 이름과 동일하다.** 매개 변수 선언은 생략할 수도 있고, 여러 개를 선언할 수도 있다. 매개 변수는 new 연산자로 생성자를 호출할 때 외부의 값을 생성자 블록 내부로 전달하는 역할을 한다.
+
+```java
+Car myCar = new Car("Grandeur", "Black", 300);
+```
+
+두 개의 매개값은 String 타입이고 마지막 매개값은 int 타입인 것을 볼 수 있다. 세 매개값을 생성자가 받기 위해선느 다음과 같이 생성자를 선언해야 한다.
+
+```java
+public class Car {
+    // 생성자
+    Car(String model, String color, int maxSpeed){
+        ...
+    }
+}
+```
+
+클래스에 생성자가 명시적으로 선언되어 있을 경우에는 반드시 선언된 생성자를 호출해서 객체를 생성해야만 한다.
+
+```java
+// 생성자를 호출해서 객체 생성
+public class CarExample {
+    public static void main(String[] args) {
+        Car myCar = new Car("Sonata", "White", 280); // 생성자 호출 가능
+//      Car myCar = new Car(); // 기본 생성자가 선언되어 있지 않아 호출 불가
+    }
+}
+```
+
+#### 7.3 필드 초기화
+
+클래스로부터 객체가 생성될 때 필드는 기본 초기값으로 자동 설정. 만약 다른 값으로 초기화를 하고 싶다면? </br>
+**1. 필드 선언 시 초기값 설정 -** 동일한 클래스로부터 생성되는 객체들은 모두 같은 데이터를 가진다.
+**2. 생성자에서 초기값 설정 -** 객체 생성 시점에 외부에서 제공되는 다양한 값들로 초기화 가능. 생성자의 매개값으로 초기화.
+
+```java
+// 생성자에서 필드 초기화
+public class Korean {
+    // 필드
+    String nation = "대한민국".
+    String name;
+    String ssn;
+
+    // 생성자
+    public Korean(String n, String s) {
+        name = n;       // 객체 생성 시 제공되는 매개값 n으로 name값 초기화
+        ssn = s;        // 객체 생성 시 제공되는 매개값 s로 ssn값 초기화
+    }
+}
+```
+
+```java
+// 객체 생성 후 필드값 출력
+public class KoreanExample {
+    public static void main(String[] args) {
+        Korean k1 = new Korean("박민철", "880115-1234567");
+
+        Korean k2 = new Korean("김세영", "901020-2123456");
+    }
+}
+```
+
+**매개변수는 관례적으로 필드와 동일한 이름을 사용한다.** 이 경우 필드와 매개 변수 이름이 동일하기 때문에 생성자 내부에서 해당 필드에 접근할 수 없다. 왜냐하면 동일한 이름의 매개 변수가 사용 우선순위가 높기 때문이다. 해결방법은 **필드 앞에 "this."** 를 붙이면 된다. this는 객체 자신의 참조인데, 우리가 우리 자신을 "나"라고 하듯이 객체가 객체 자신을 "this"라고 한다. **"this.필드"는 this라는 참조 변수로 필드를 사용하는 것과 동일하다.**
+
+```java
+public Korean(String name, String ssn) {
+    this.name = name;       // this.name의 name은 필드, 우측 name은 매개 변수
+    this.ssn = ssn;         // this.ssn의 ssn은 필드, 우측 ssn은 매개 변수
+}
+```
+
+#### 7.4 생성자 오버로딩(Overloading)
+
+**생성자 오버로딩이란 매개 변수를 달리하는 생성자를 여러 개 선언하는 것을 말한다.**
+
+```java
+public class Class {
+    // 생성자 오버로딩: 생성자 A와 B의 매개 변수 타입, 개수, 순서가 다르게 선언
+    Class([type parameter, ...]) { // 생성자 A
+        ...
+    }
+
+    Class([type parameter, ...]) { // 생성자 B
+        ...
+    }
+}
+```
+
+**_생성자 오버로딩 시 주의할 점은 매개 변수의 타입, 개수, 선언 순서가 똑같을 경우 매개 변수 이름만 바꾸는 것은 생성자 오버로딩으로 볼 수 없다는 것이다._**
+
+```java
+Car(String model, String color) {...}
+Car(String color, String model) {...} // 오버로딩이 아님
+```
+
+```java
+// 생성자 오버로딩 예시
+public class Car {
+    // 필드
+    String company = "Hyundai"
+    String model;
+    String color;
+    int maxSpeed;
+
+    // 생성자 1
+    Car() {
+    }
+
+    // 생성자 2
+    Car(String model) {
+        this.model = model;
+    }
+
+    // 생성자 3
+    Car(String model, String color) {
+        this.model = model;
+        this.color = color;
+    }
+
+    // 생성자 4
+    Car(String model, String color, int maxSpeed) {
+        this.model = model;
+        this.color = color;
+        this.maxSpeed = maxSpeed;
+    }
+}
+```
+
+#### 7.5 다른 생성자 호출(this())
+
+생성자 오버로딩이 많아질 경우 생성자 간의 중복 코드가 발생할 수 있다. (매개 변수의 수만 달리하고 필드 초기화 내용이 비슷한 생성자의 경우) 이 경우, 필드 초기호 내용은 한 생성자에만 집중적으로 작성하고 나머지는 초기화 내용을 가지고 있는 생성자를 호출하는 방법으로 개선할 수 있다. 방법은 this() 코드를 사용하는 것이다.
+
+```java
+ClassName([type parameter, ...]) {
+    this(parameter, ..., value, ...); // 클래스의 다른 생성자 호출
+    ...;
+}
+```
+
+this()는 자신의 다른 생성자를 호출하는 코드로 반드시 생성자의 첫줄에서만 허용된다. this()의 매개값은 호출되는 생성자의 매개 변수 타입에 맞게 제공해야 한다.
+
+```java
+// 다른 생성자를 호출하여 중복 코드 제거
+public class Car {
+    // 필드
+    String company = "Hyundai"
+    String model;
+    String color;
+    int maxSpeed;
+
+    // 생성자 1
+    Car() {
+    }
+
+    // 생성자 2
+    Car(String model) {
+        this(model, "Silver", 250); // 생성자 4 호출
+    }
+
+    // 생성자 3
+    Car(String model, String color) {
+        this(model, "color", 250); // 생성자 4 호출
+    }
+
+    // 생성자 4
+    Car(String model, String color, int maxSpeed) {
+        this.model = model;         // 공통 실행 코드
+        this.color = color;         // 공통 실행 코드
+        this.maxSpeed = maxSpeed;   // 공통 실행 코드
+    }
+}
+```
+
+<hr>
